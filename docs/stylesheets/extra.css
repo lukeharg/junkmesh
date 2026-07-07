@@ -79,19 +79,32 @@
   position: relative;
 }
 
+.jm-hero .jm-lockup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 0.45rem;
+}
+
 .jm-hero .jm-mark {
-  width: 4.2rem;
-  height: 4.2rem;
-  margin-bottom: 0.6rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex: none;
 }
 
 .jm-hero h1 {
-  margin: 0 0 0.4rem;
+  margin: 0;
   font-family: "Space Grotesk", Inter, sans-serif;
-  font-size: 3rem;
+  font-size: 2.85rem;
   font-weight: 700;
   letter-spacing: -0.035em;
   color: #ffffff;
+}
+
+@media screen and (max-width: 30em) {
+  .jm-hero .jm-mark { width: 2rem; height: 2rem; }
+  .jm-hero h1 { font-size: 2.2rem; }
 }
 
 .jm-hero .jm-tagline {

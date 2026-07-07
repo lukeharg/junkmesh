@@ -8,9 +8,10 @@ hide:
 
 <div class="jm-hero" markdown>
 
+<div class="jm-lockup">
 <img class="jm-mark" src="assets/mark-hero.svg" alt="" aria-hidden="true">
-
 <h1>Junkmesh</h1>
+</div>
 
 <p class="jm-tagline">No masters. No lighthouses. Just mesh.</p>
 
