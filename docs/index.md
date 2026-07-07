@@ -95,8 +95,9 @@ registered or blessed by anyone.
 
 - :material-chart-line: **[Observability built in](operate/metrics.md)**
 
-    Every node serves Prometheus metrics and a JSON status API. Watch your
-    mesh from Grafana, New Relic or anything OTLP — self-hosted, of course.
+    Prometheus metrics, a JSON status API, and mesh-native discovery — point
+    Grafana, New Relic or any OTLP collector at one node and it finds the
+    whole cluster. Self-hosted, of course.
 
 - :material-feather: **[Lightweight by design](about/faq.md#why-no-containers)**
 

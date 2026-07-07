@@ -15,13 +15,14 @@ we intend to answer them.
 
 - [ ] Three-node reference cluster on real junk hardware
 - [ ] Scripted cluster bootstrap (`junkmesh-cluster init` / `join`)
-- [ ] Peer-exchange convention so Junkmesh nodes can find each other without
-      relying on public Yggdrasil peers
 - [x] Per-node metrics/status API (`junkmesh-exporter`: Prometheus
       `/metrics` + JSON `/api/v1/status` on port 3904 —
       [docs](../operate/metrics.md))
-- [ ] Node health beacon / decentralised discovery over the mesh, so
-      monitoring targets don't need a hand-maintained list
+- [x] Mesh-native discovery — `/api/v1/discovery` serves the whole cluster
+      as Prometheus HTTP-SD, derived from Garage membership, so monitoring
+      needs no hand-maintained target list
+- [ ] Peer-exchange convention so Junkmesh nodes can find each other without
+      relying on public Yggdrasil peers
 - [ ] ARM ISO (aarch64) for retired Chromebooks, Raspberry Pis and Mac minis
 
 ## Phase 2 — Admission without administrators

@@ -4,9 +4,11 @@
 // cycles rendering dashboards. This service exposes everything a
 // self-hosted Prometheus/Grafana (or a curl-wielding human) needs:
 //
-//	GET /metrics         node-level metrics, Prometheus exposition format
-//	GET /metrics/garage  Garage's own metrics, proxied from the local admin API
-//	GET /api/v1/status   richer JSON for dashboards and CLIs
+//	GET /metrics          node + cluster metrics, Prometheus exposition format
+//	GET /metrics/garage   Garage's own metrics, proxied from the local admin API
+//	GET /api/v1/status    richer JSON for dashboards and CLIs
+//	GET /api/v1/discovery every cluster node as Prometheus HTTP-SD, for
+//	                      zero-config scraping of the whole mesh
 //
 // It reads /proc for system stats, the Yggdrasil admin socket (via
 // yggdrasilctl) for mesh state, and the Garage admin API on localhost for
@@ -27,6 +29,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"os/exec"
@@ -55,12 +58,21 @@ var (
 
 var httpClient = &http.Client{Timeout: 5 * time.Second}
 
+// exporterPort is the port this exporter listens on, reused when advertising
+// peer nodes for discovery (every node runs the exporter on the same port).
+func exporterPort() string {
+	if _, port, err := net.SplitHostPort(listenAddr); err == nil && port != "" {
+		return port
+	}
+	return "3904"
+}
+
 // ── system stats ────────────────────────────────────────────────────────
 
 // cpuSampler keeps the previous /proc/stat reading so each scrape reports
 // utilisation since the last scrape.
 type cpuSampler struct {
-	mu               sync.Mutex
+	mu                sync.Mutex
 	prevBusy, prevAll uint64
 }
 
@@ -209,6 +221,56 @@ func garageHealth() map[string]any {
 	return m
 }
 
+// garageStats returns the decoded /v2/GetClusterStatistics body, or nil.
+// This is where cluster-wide object and bucket counts live.
+func garageStats() map[string]any {
+	resp, err := garageGet("/v2/GetClusterStatistics")
+	if err != nil {
+		return nil
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		io.Copy(io.Discard, resp.Body)
+		return nil
+	}
+	var m map[string]any
+	if json.NewDecoder(resp.Body).Decode(&m) != nil {
+		return nil
+	}
+	return m
+}
+
+// clusterNode is one entry from /v2/GetClusterStatus's node list.
+type clusterNode struct {
+	ID       string `json:"id"`
+	Hostname string `json:"hostname"`
+	Addr     string `json:"addr"` // "[200:…ygg…]:3901" — Garage RPC over the mesh
+	IsUp     bool   `json:"isUp"`
+}
+
+// garageNodes lists every node Garage knows in the cluster. Each node's RPC
+// address is its Yggdrasil address, which is exactly what a management server
+// needs to reach that node's exporter — this is the raw material for
+// mesh-native discovery.
+func garageNodes() []clusterNode {
+	resp, err := garageGet("/v2/GetClusterStatus")
+	if err != nil {
+		return nil
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		io.Copy(io.Discard, resp.Body)
+		return nil
+	}
+	var body struct {
+		Nodes []clusterNode `json:"nodes"`
+	}
+	if json.NewDecoder(resp.Body).Decode(&body) != nil {
+		return nil
+	}
+	return body.Nodes
+}
+
 func numField(m map[string]any, key string) (float64, bool) {
 	if m == nil {
 		return 0, false
@@ -256,6 +318,20 @@ func handleMetrics(w http.ResponseWriter, _ *http.Request) {
 			gauge("junkmesh_garage_partitions", "Total data partitions.", v)
 		}
 	}
+	if s := garageStats(); s != nil {
+		if v, ok := numField(s, "totalObjectCount"); ok {
+			gauge("junkmesh_garage_objects_total", "Objects stored across all buckets in the cluster.", v)
+		}
+		if v, ok := numField(s, "totalObjectBytes"); ok {
+			gauge("junkmesh_garage_object_bytes", "Logical size of stored objects, before dedup/replication.", v)
+		}
+		if v, ok := numField(s, "bucketCount"); ok {
+			gauge("junkmesh_garage_buckets", "Number of buckets in the cluster.", v)
+		}
+		if v, ok := numField(s, "dataAvail"); ok {
+			gauge("junkmesh_garage_data_avail_bytes", "Available object-data space across the cluster.", v)
+		}
+	}
 
 	fmt.Fprintf(&b,
 		"# HELP junkmesh_exporter_build_info Exporter build info.\n"+
@@ -294,6 +370,17 @@ func handleStatus(w http.ResponseWriter, _ *http.Request) {
 			}
 		}
 	}
+	if s := garageStats(); s != nil {
+		if v, ok := s["totalObjectCount"]; ok {
+			garage["objects"] = v
+		}
+		if v, ok := s["totalObjectBytes"]; ok {
+			garage["used"] = v
+		}
+		if v, ok := s["bucketCount"]; ok {
+			garage["buckets"] = v
+		}
+	}
 
 	body := map[string]any{
 		"node":    hostname,
@@ -308,17 +395,61 @@ func handleStatus(w http.ResponseWriter, _ *http.Request) {
 	enc.Encode(body)
 }
 
+// handleDiscovery is mesh-native service discovery. Because every node's
+// Garage RPC address IS its Yggdrasil address, any single node already knows
+// how to reach every other node's exporter. A management server points
+// Prometheus `http_sd_configs` at ONE node's /api/v1/discovery and gets the
+// whole cluster back — no hand-maintained target list, no central registry,
+// membership changes followed automatically. The response is Prometheus HTTP
+// SD format, which Datadog/Grafana Agent/OTel's prometheus receiver also read.
+func handleDiscovery(w http.ResponseWriter, _ *http.Request) {
+	type group struct {
+		Targets []string          `json:"targets"`
+		Labels  map[string]string `json:"labels,omitempty"`
+	}
+	port := exporterPort()
+	groups := []group{}
+	for _, n := range garageNodes() {
+		if n.Addr == "" {
+			continue
+		}
+		host, _, err := net.SplitHostPort(n.Addr)
+		if err != nil {
+			continue
+		}
+		labels := map[string]string{"__meta_junkmesh_node_id": n.ID}
+		if n.Hostname != "" {
+			labels["__meta_junkmesh_hostname"] = n.Hostname
+		}
+		if n.IsUp {
+			labels["__meta_junkmesh_up"] = "true"
+		} else {
+			labels["__meta_junkmesh_up"] = "false"
+		}
+		groups = append(groups, group{
+			Targets: []string{net.JoinHostPort(host, port)},
+			Labels:  labels,
+		})
+	}
+	w.Header().Set("Content-Type", "application/json")
+	enc := json.NewEncoder(w)
+	enc.SetIndent("", "  ")
+	enc.Encode(groups)
+}
+
 func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /metrics", handleMetrics)
 	mux.HandleFunc("GET /metrics/garage", handleGarageMetrics)
 	mux.HandleFunc("GET /api/v1/status", handleStatus)
+	mux.HandleFunc("GET /api/v1/discovery", handleDiscovery)
 	mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/" {
 			http.NotFound(w, r)
 			return
 		}
-		io.WriteString(w, "junkmesh-exporter "+version+"\n/metrics /metrics/garage /api/v1/status\n")
+		io.WriteString(w, "junkmesh-exporter "+version+
+			"\n/metrics /metrics/garage /api/v1/status /api/v1/discovery\n")
 	})
 
 	log.Printf("junkmesh-exporter %s listening on %s", version, listenAddr)

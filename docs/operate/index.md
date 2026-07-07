@@ -19,9 +19,9 @@ whole cluster from one dashboard.
 
 - :material-chart-line: **[Metrics & monitoring](metrics.md)**
 
-    Every node serves Prometheus metrics and a JSON status API on port
-    3904. Scrape it with Prometheus, an OpenTelemetry Collector, New Relic
-    — whatever you already run.
+    Every node serves Prometheus metrics, a JSON status API and mesh-native
+    discovery on port 3904. Point Prometheus, an OpenTelemetry Collector or
+    New Relic at one node and it finds the whole cluster.
 
 </div>
 
