@@ -21,6 +21,7 @@ jobs:
         run: |
           cd iso/out
           iso="$(ls alpine-junkmesh-*.iso | head -n1)"
+          rm -f junkmesh-x86_64.iso   # build.sh leaves a symlink of this name
           cp "$iso" junkmesh-x86_64.iso
           sha256sum junkmesh-x86_64.iso > junkmesh-x86_64.iso.sha256
 

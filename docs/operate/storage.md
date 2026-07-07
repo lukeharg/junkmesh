@@ -21,7 +21,9 @@ node's mesh address on port 3900, e.g. `http://[200:6fc8:9be3:...:41c2]:3900`.
     The S3 port is only reachable over Yggdrasil (ring 1). Install Yggdrasil
     on your laptop/desktop — it runs fine alongside normal networking — and
     peer it like any node ([Join the mesh](../install/join.md), step 1). Your
-    laptop doesn't need Garage, only the mesh.
+    laptop doesn't need Garage, only the mesh — it's a *client* of the node
+    you host, not a replacement for it. Membership still means
+    [hosting a node](../index.md).
 
 ## rclone
 

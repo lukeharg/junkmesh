@@ -68,6 +68,14 @@ disk. If your threat model includes the person hosting the node, encrypt
 client-side (e.g. `rclone crypt`) before uploading. This mirrors Junk Net's
 guidance.
 
+## Can I use the storage without hosting a node?
+
+No. There's no service to subscribe to and nobody who could sell you one —
+the only way into Junkmesh is to host a node. Your hardware holding replicas
+for others is what pays for others holding replicas for you. (Accessing
+*your own cluster's* buckets from your everyday laptop is fine — that's a
+client of the node you already host, not a substitute for it.)
+
 ## What do I get for hosting a node?
 
 Storage that outlives your hardware. Contribute a machine to a cluster and

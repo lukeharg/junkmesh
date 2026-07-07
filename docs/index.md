@@ -1,78 +1,101 @@
-# Junkmesh
+# Junkmesh { .jm-visually-hidden style="display:none" }
 
-**No masters. No lighthouses. Just mesh.**
+<div class="jm-hero" markdown>
+
+<h1>Junkmesh</h1>
+
+<p class="jm-tagline">No masters. No lighthouses. Just mesh.</p>
+
+<p class="jm-sub">Old laptops don't die — they become nodes in a
+community-owned, S3-compatible storage cloud with <strong>no central
+infrastructure at all</strong>. An encrypted Yggdrasil mesh for the network,
+Garage for replicated storage, one bootable ISO to set it all up.</p>
+
+[Get the ISO](install/download.md){ .md-button .md-button--primary }
+[How it works](architecture/overview.md){ .md-button }
+
+</div>
+
+<div class="jm-membership" markdown>
+**Your node is your membership.** There is no service to sign up to, no
+account, and nobody hosting anything on your behalf — this site and the ISO
+download are static files, and that's all the project provides. **To be part
+of Junkmesh, you host a node**: your own hardware, in your own home, holding
+replicas for the cluster. In return the cluster holds replicas for you.
+No node, no membership — that's not a rule anyone enforces, it's just how
+the thing works.
+</div>
+
+## How you join
+
+<div class="jm-steps" markdown>
+<div class="jm-step" markdown>
+<span class="jm-step-n">1</span>
+**Boot the ISO on your own machine**
+<p>Any x86 laptop from the last ~15 years. Write the image to USB, boot,
+run <code>junkmesh-setup</code>. The disk is wiped and the machine becomes
+your node.</p>
+</div>
+<div class="jm-step" markdown>
+<span class="jm-step-n">2</span>
+**Cluster with people you trust**
+<p>Peer over the mesh, share a cluster secret out-of-band, and existing
+members admit your node explicitly. Three households make a resilient
+cluster.</p>
+</div>
+<div class="jm-step" markdown>
+<span class="jm-step-n">3</span>
+**Get storage that outlives your hardware**
+<p>Every object is replicated to three nodes in different homes. Your disk
+dies, your house floods — your data doesn't care. S3-compatible, works with
+rclone, restic, anything.</p>
+</div>
+</div>
+
+## The stack
 
 Junkmesh is an experimental, *truly decentralised* sibling of
-[Junk Net](https://junknet.au). Same idea — old laptops don't die, they join
-the network and become community-owned storage — but with one big difference:
-**there is no central coordination point at all.**
-
-Junk Net uses [Nebula](https://github.com/slackhq/nebula), which needs a
-certificate authority to sign every node and "lighthouse" servers so nodes can
-find each other. Someone has to run those. Junkmesh replaces that layer with
-[Yggdrasil](https://yggdrasil-network.github.io/): an end-to-end encrypted
-IPv6 mesh where every node's address *is* its cryptographic identity, routing
-is self-organising, and nothing needs to be signed, registered or blessed by
-anyone.
-
-## Nobody hosts this for you
-
-Junkmesh has no servers, no operators and no service to sign up to. The
-project publishes exactly two things — this documentation and a bootable
-ISO, both served as static files from GitHub. Everything that *runs* is
-hosted by the people who use it: you boot the ISO on your own machine, you
-own the node, and you get the benefit — your data replicated across the
-other self-hosted nodes in your cluster, and theirs across yours. If the
-maintainers of this site vanished tomorrow, every Junkmesh cluster would
-keep working, because none of them ever depended on us for anything.
-
-## What you get
-
-A single bootable ISO. Write it to a USB stick, boot a retired laptop, run one
-command, and the machine becomes a Junkmesh node:
-
-- **Network layer** — [Yggdrasil](architecture/network.md) gives the node a
-  stable, self-certifying IPv6 address and encrypted connectivity to every
-  other node, with zero configuration on a shared LAN.
-- **Storage layer** — [Garage](architecture/storage.md) pools the node's disk
-  into a replicated, S3-compatible object store built for flaky, heterogeneous
-  hardware.
-- **Access control** — [three concentric rings](architecture/access-control.md):
-  who may peer, who may store, who may read and write.
-
-## Get started
+[Junk Net](https://junknet.au). Junk Net's overlay (Nebula) needs a
+certificate authority and lighthouse servers — someone has to run those.
+Junkmesh replaces that layer with
+[Yggdrasil](https://yggdrasil-network.github.io/), where every node's
+address *is* its cryptographic identity and nothing needs to be signed,
+registered or blessed by anyone.
 
 <div class="grid cards" markdown>
 
-- :material-download: **[Download the ISO](install/download.md)**
+- :material-lan: **[Network layer — Yggdrasil](architecture/network.md)**
 
-    Grab the latest image and checksum.
+    A self-certifying IPv6 address per node, encrypted end-to-end,
+    zero-config peering on a LAN, self-organising routing everywhere else.
 
-- :material-usb-flash-drive: **[Write it to USB](install/usb.md)**
+- :material-database: **[Storage layer — Garage](architecture/storage.md)**
 
-    `dd`, Etcher or Ventoy — your choice.
+    S3-compatible object storage built for flaky, mismatched, second-hand
+    hardware. Three replicas of everything, one per household.
 
-- :material-laptop: **[First boot & install](install/first-boot.md)**
+- :material-shield-lock: **[Access control — three rings](architecture/access-control.md)**
 
-    Boot, run `junkmesh-setup`, done.
+    Firewall at the node, shared secret + explicit admission at the cluster,
+    per-bucket S3 keys for data. The open mesh grants nothing by itself.
 
-- :material-lan: **[Join the mesh](install/join.md)**
+- :material-usb-flash-drive: **[The installer ISO](install/download.md)**
 
-    Peer with other nodes and join a storage cluster.
+    Alpine Linux, ~390 MB, boots BIOS or UEFI. One command turns a retired
+    laptop into a node. [Build it yourself](build/iso.md) if you prefer.
 
 </div>
 
 !!! warning "Experimental"
     Junkmesh is a research spike, not a product. It has not had a security
-    review, the storage cluster tooling is manual, and the ISO is rebuilt
-    frequently with breaking changes. Don't put the only copy of anything
-    on it yet. For the stable community pilot, see [Junk Net](https://junknet.au).
+    review, the cluster tooling is manual, and the ISO is rebuilt frequently
+    with breaking changes. Don't put the only copy of anything on it yet.
+    For the dependable community pilot, see [Junk Net](https://junknet.au).
 
 ## Why bother?
 
-The same three reasons as Junk Net — sustainability, cost, sovereignty — plus
-a fourth that motivates this experiment: **resilience**. A network with a
-certificate authority and lighthouses has owners, and owners are single points
-of failure — technical, financial and legal. Junkmesh asks: how much of a
-community cloud can run with *nobody* in charge? Read more in
-[Why Junkmesh](about/why.md).
+Four reasons: **sustainability** (ten more years of service is the greenest
+computing there is), **cost** (host a node, get storage — no bills),
+**sovereignty** (your data lives in homes you can visit, not a hyperscaler's
+billing system), and **resilience** (no CA to seize, no lighthouse to
+unplug, no company to fold). Read more in [Why Junkmesh](about/why.md).

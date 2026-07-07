@@ -1,0 +1,181 @@
+/* ── Junkmesh brand ──────────────────────────────────────────────────── */
+
+:root {
+  --jm-ink:    #171a21;   /* charcoal — headers, hero */
+  --jm-amber:  #ff6a3c;   /* rust/amber — the accent */
+  --jm-amber-soft: rgba(255, 106, 60, 0.14);
+}
+
+/* custom palette slots (mkdocs.yml sets primary/accent: custom) */
+[data-md-color-scheme="default"],
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: var(--jm-ink);
+  --md-primary-fg-color--light: #2a2e38;
+  --md-primary-fg-color--dark: #0f1116;
+  --md-accent-fg-color: var(--jm-amber);
+  --md-accent-fg-color--transparent: var(--jm-amber-soft);
+}
+
+[data-md-color-scheme="default"] {
+  --md-typeset-a-color: #c94f22;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-hue: 225;
+  --md-typeset-a-color: #ff8a62;
+  --md-default-bg-color: #14161c;
+}
+
+/* ── typography ──────────────────────────────────────────────────────── */
+
+.md-typeset h1,
+.md-typeset h2 {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.md-typeset h1 {
+  color: var(--md-default-fg-color);
+}
+
+/* ── hero (home page) ────────────────────────────────────────────────── */
+
+.jm-hero {
+  margin: 0.2rem 0 1.6rem;
+  padding: 2.6rem 1.6rem 2.4rem;
+  border-radius: 0.8rem;
+  text-align: center;
+  color: #e8eaf0;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 106, 60, 0.22), transparent 34%),
+    radial-gradient(circle at 88% 78%, rgba(255, 106, 60, 0.16), transparent 30%),
+    radial-gradient(circle at 78% 12%, rgba(120, 140, 200, 0.18), transparent 32%),
+    linear-gradient(160deg, #171a21 0%, #23262f 100%);
+}
+
+.jm-hero h1 {
+  margin: 0 0 0.3rem;
+  font-size: 2.6rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+}
+
+.jm-hero .jm-tagline {
+  margin: 0 auto 0.7rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--jm-amber);
+}
+
+.jm-hero .jm-sub {
+  max-width: 34rem;
+  margin: 0 auto 1.3rem;
+  font-size: 0.78rem;
+  line-height: 1.65;
+  color: #b9bec9;
+}
+
+.jm-hero .md-button {
+  margin: 0.15rem 0.3rem;
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #e8eaf0;
+}
+
+.jm-hero .md-button--primary {
+  background-color: var(--jm-amber);
+  border-color: var(--jm-amber);
+  color: #171a21;
+  font-weight: 700;
+}
+
+.jm-hero .md-button:hover {
+  border-color: var(--jm-amber);
+  color: var(--jm-amber);
+}
+
+.jm-hero .md-button--primary:hover {
+  background-color: #ff8a62;
+  color: #171a21;
+}
+
+/* ── "your node is your membership" strip ────────────────────────────── */
+
+.jm-membership {
+  margin: 1.6rem 0;
+  padding: 1.1rem 1.3rem;
+  border-left: 0.25rem solid var(--jm-amber);
+  border-radius: 0.3rem;
+  background: var(--jm-amber-soft);
+  font-size: 0.78rem;
+}
+
+.jm-membership strong {
+  color: var(--jm-amber);
+}
+
+/* ── numbered how-it-works steps ─────────────────────────────────────── */
+
+.jm-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 0.8rem;
+  margin: 1.2rem 0;
+}
+
+.jm-step {
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.6rem;
+}
+
+.jm-step .jm-step-n {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  margin-bottom: 0.5rem;
+  border-radius: 50%;
+  background: var(--jm-amber);
+  color: #171a21;
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+.jm-step p {
+  margin: 0.2rem 0 0;
+  font-size: 0.72rem;
+}
+
+.jm-step strong {
+  font-size: 0.8rem;
+}
+
+/* ── cards polish ────────────────────────────────────────────────────── */
+
+.md-typeset .grid.cards > ul > li {
+  border-radius: 0.6rem;
+  transition: border-color 125ms, transform 125ms, box-shadow 125ms;
+}
+
+.md-typeset .grid.cards > ul > li:hover {
+  border-color: var(--jm-amber);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* ── misc ────────────────────────────────────────────────────────────── */
+
+.md-header,
+.md-tabs {
+  background-color: var(--jm-ink);
+}
+
+.md-typeset code {
+  border-radius: 0.2rem;
+}
+
+.md-footer-meta {
+  background-color: #0f1116;
+}
