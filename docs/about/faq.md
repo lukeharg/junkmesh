@@ -68,7 +68,19 @@ disk. If your threat model includes the person hosting the node, encrypt
 client-side (e.g. `rclone crypt`) before uploading. This mirrors Junk Net's
 guidance.
 
+## What do I get for hosting a node?
+
+Storage that outlives your hardware. Contribute a machine to a cluster and
+your data is kept as three replicas spread across the other members' nodes —
+so a dead disk, a burglary or a house fire costs you nothing. You provide a
+shelf, power and some junk hardware; the cluster provides the redundancy
+none of you could have alone.
+
 ## Who runs Junkmesh?
 
-The same community as Junk Net. Contact
+Nobody — that's the point. Every node is owned and run by its host, and each
+cluster governs its own membership. There is no Junkmesh server anywhere:
+this documentation and the ISO are static files served by GitHub, and the
+project's maintainer hosts nothing at all. The docs and ISO are maintained
+by the maker of [Junk Net](https://junknet.au) — contact
 [info@aquainnis.com](mailto:info@aquainnis.com).

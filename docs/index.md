@@ -15,6 +15,17 @@ IPv6 mesh where every node's address *is* its cryptographic identity, routing
 is self-organising, and nothing needs to be signed, registered or blessed by
 anyone.
 
+## Nobody hosts this for you
+
+Junkmesh has no servers, no operators and no service to sign up to. The
+project publishes exactly two things — this documentation and a bootable
+ISO, both served as static files from GitHub. Everything that *runs* is
+hosted by the people who use it: you boot the ISO on your own machine, you
+own the node, and you get the benefit — your data replicated across the
+other self-hosted nodes in your cluster, and theirs across yours. If the
+maintainers of this site vanished tomorrow, every Junkmesh cluster would
+keep working, because none of them ever depended on us for anything.
+
 ## What you get
 
 A single bootable ISO. Write it to a USB stick, boot a retired laptop, run one

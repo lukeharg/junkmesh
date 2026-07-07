@@ -9,7 +9,7 @@ we intend to answer them.
 - [x] `junkmesh-setup` one-command installer (disk install, key generation,
       service wiring, firewall)
 - [x] Documentation site (this site)
-- [ ] Reproducible ISO builds in CI, published to GitHub Releases
+- [x] Reproducible ISO builds in CI, published to GitHub Releases
 
 ## Phase 1 — Cluster
 
@@ -19,6 +19,7 @@ we intend to answer them.
       relying on public Yggdrasil peers
 - [ ] Node health beacon (uptime, capacity, Garage status) published over the
       mesh
+- [ ] ARM ISO (aarch64) for retired Chromebooks, Raspberry Pis and Mac minis
 
 ## Phase 2 — Admission without administrators
 

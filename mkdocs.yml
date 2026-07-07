@@ -81,9 +81,10 @@ nav:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/junknetau
+      link: https://github.com/lukeharg/junkmesh
     - icon: material/email
       link: mailto:info@aquainnis.com
 
 copyright: >-
-  Junkmesh is an experiment by the Junk Net community · Apache-2.0
+  Junkmesh · an experiment from the maker of Junk Net · Apache-2.0 ·
+  no servers, no operators — every node is self-hosted

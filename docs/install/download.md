@@ -11,9 +11,10 @@ UEFI machines and installs to disk with one command.
 
     ---
 
-    [**junkmesh-x86_64.iso** :material-open-in-new:](https://github.com/lukeharg/junkmesh/releases/latest){ .md-button .md-button--primary }
+    [**Get the latest ISO** :material-open-in-new:](https://github.com/lukeharg/junkmesh/releases/latest){ .md-button .md-button--primary }
 
-    From GitHub Releases — includes `.sha256` checksum alongside each image.
+    Opens the latest GitHub Release — download **`junkmesh-x86_64.iso`**
+    and its **`.sha256`** checksum from the *Assets* list.
 
 </div>
 
@@ -37,7 +38,7 @@ junkmesh-x86_64.iso: OK
 | Yggdrasil | 0.5.x | [Network layer](../architecture/network.md) |
 | Garage | 2.3.x | [Storage layer](../architecture/storage.md) |
 | nftables | — | [Ring 1 access control](../architecture/access-control.md) |
-| `junkmesh-setup` | from this repo | Interactive disk installer & node configurator |
+| `junkmesh-setup` | built from this repo | Interactive disk installer & node configurator |
 
 ## Hardware requirements
 
