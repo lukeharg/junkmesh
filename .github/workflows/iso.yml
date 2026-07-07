@@ -1,0 +1,41 @@
+name: iso
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build ISO (runs iso/build.sh inside its Docker environment)
+        run: ./iso/build.sh
+
+      - name: Rename artifacts
+        run: |
+          cd iso/out
+          iso="$(ls alpine-junkmesh-*.iso | head -n1)"
+          cp "$iso" junkmesh-x86_64.iso
+          sha256sum junkmesh-x86_64.iso > junkmesh-x86_64.iso.sha256
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: junkmesh-iso
+          path: |
+            iso/out/junkmesh-x86_64.iso
+            iso/out/junkmesh-x86_64.iso.sha256
+
+      - name: Attach to release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            iso/out/junkmesh-x86_64.iso
+            iso/out/junkmesh-x86_64.iso.sha256
+          generate_release_notes: true

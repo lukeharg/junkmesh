@@ -1,0 +1,89 @@
+site_name: Junkmesh
+site_description: >-
+  A truly decentralised community cloud. Old laptops, an Yggdrasil mesh,
+  Garage storage — and no one in charge.
+site_url: https://junkmesh.com
+repo_url: https://github.com/junknetau/junkmesh
+repo_name: junknetau/junkmesh
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  icon:
+    logo: material/lan-disconnect
+    repo: fontawesome/brands/github
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: deep orange
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: deep orange
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.action.edit
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - About:
+      - Why Junkmesh: about/why.md
+      - Junkmesh vs Junk Net: about/junknet.md
+      - FAQ: about/faq.md
+      - Roadmap: about/roadmap.md
+  - Architecture:
+      - Overview: architecture/overview.md
+      - Network layer — Yggdrasil: architecture/network.md
+      - Storage layer — Garage: architecture/storage.md
+      - Access control: architecture/access-control.md
+  - Install:
+      - Download the ISO: install/download.md
+      - Write it to USB: install/usb.md
+      - First boot & install: install/first-boot.md
+      - Join the mesh: install/join.md
+  - Build:
+      - Build the ISO yourself: build/iso.md
+  - Operate:
+      - Running a node: operate/node.md
+      - Using the storage: operate/storage.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/junknetau
+    - icon: material/email
+      link: mailto:info@aquainnis.com
+
+copyright: >-
+  Junkmesh is an experiment by the Junk Net community · Apache-2.0

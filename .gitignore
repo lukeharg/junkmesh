@@ -1,0 +1,8 @@
+site/
+.venv/
+iso/out/
+iso/aports/
+*.iso
+*.iso.sha256
+__pycache__/
+.DS_Store
