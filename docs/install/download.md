@@ -11,7 +11,7 @@ UEFI machines and installs to disk with one command.
 
     ---
 
-    [**junkmesh-x86_64.iso** :material-open-in-new:](https://github.com/junknetau/junkmesh/releases/latest){ .md-button .md-button--primary }
+    [**junkmesh-x86_64.iso** :material-open-in-new:](https://github.com/lukeharg/junkmesh/releases/latest){ .md-button .md-button--primary }
 
     From GitHub Releases — includes `.sha256` checksum alongside each image.
 

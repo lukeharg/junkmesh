@@ -26,6 +26,10 @@ if [ ! -f /etc/alpine-release ]; then
 		*)       platform="linux/amd64" ;;
 	esac
 	echo "== Building via Docker ($platform)"
+	# the container's builder user (uid 1000) must be able to write these
+	# even when the host checkout is owned by another uid (CI runners)
+	mkdir -p "$here/out" "$here/aports"
+	chmod 777 "$here/out" "$here/aports"
 	docker build --platform "$platform" -t junkmesh-isobuilder "$here"
 	exec docker run --rm --platform "$platform" \
 		-v "$here":/work \
@@ -43,7 +47,7 @@ if ! ls "$HOME"/.abuild/*.rsa >/dev/null 2>&1; then
 	abuild-keygen -a -i -n
 fi
 
-if [ ! -d aports ]; then
+if [ ! -d aports/.git ]; then
 	echo "== Cloning aports ($ALPINE_BRANCH)"
 	git clone --depth=1 --branch "$ALPINE_BRANCH" \
 		https://gitlab.alpinelinux.org/alpine/aports.git aports

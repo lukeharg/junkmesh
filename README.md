@@ -12,7 +12,7 @@ identity. Storage is [Garage](https://garagehq.deuxfleurs.fr/), three
 replicas of everything, spread across households.
 
 📖 **Docs:** https://junkmesh.com (source in [`docs/`](docs/))
-💿 **ISO:** [GitHub Releases](https://github.com/junknetau/junkmesh/releases)
+💿 **ISO:** [GitHub Releases](https://github.com/lukeharg/junkmesh/releases)
 — or [build it yourself](docs/build/iso.md) with `./iso/build.sh`
 
 ## Repository layout

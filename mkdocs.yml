@@ -3,8 +3,8 @@ site_description: >-
   A truly decentralised community cloud. Old laptops, an Yggdrasil mesh,
   Garage storage — and no one in charge.
 site_url: https://junkmesh.com
-repo_url: https://github.com/junknetau/junkmesh
-repo_name: junknetau/junkmesh
+repo_url: https://github.com/lukeharg/junkmesh
+repo_name: lukeharg/junkmesh
 edit_uri: edit/main/docs/
 
 theme:
