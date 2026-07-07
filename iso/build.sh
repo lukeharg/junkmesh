@@ -64,7 +64,7 @@ if [ -d "$here/../exporter" ] && command -v go >/dev/null; then
 		*)       goarch=amd64 ;;
 	esac
 	(cd "$here/../exporter" && CGO_ENABLED=0 GOOS=linux GOARCH="$goarch" \
-		go build -trimpath \
+		go build -trimpath -buildvcs=false \
 		-ldflags "-s -w -X main.version=${EXPORTER_VERSION:-0.1.0}" \
 		-o "$here/out/junkmesh-exporter")
 	export JUNKMESH_EXPORTER_BIN="$here/out/junkmesh-exporter"
