@@ -32,9 +32,9 @@ if [ ! -f /etc/alpine-release ]; then
 	chmod 777 "$here/out" "$here/aports"
 	docker build --platform "$platform" -t junkmesh-isobuilder "$here"
 	exec docker run --rm --platform "$platform" \
-		-v "$here":/work \
+		-v "$(dirname "$here")":/work \
 		-e ALPINE_BRANCH -e ALPINE_TAG -e ARCH -e MIRROR \
-		junkmesh-isobuilder /work/build.sh
+		junkmesh-isobuilder /work/iso/build.sh
 fi
 
 # --- on Alpine from here on --------------------------------------------------
@@ -55,6 +55,23 @@ fi
 
 cp mkimg.junkmesh.sh genapkovl-junkmesh.sh aports/scripts/
 chmod +x aports/scripts/mkimg.junkmesh.sh aports/scripts/genapkovl-junkmesh.sh
+
+# build the management-plane exporter; genapkovl bakes it into the overlay
+if [ -d "$here/../exporter" ] && command -v go >/dev/null; then
+	echo "== Building junkmesh-exporter"
+	case "$ARCH" in
+		aarch64) goarch=arm64 ;;
+		*)       goarch=amd64 ;;
+	esac
+	(cd "$here/../exporter" && CGO_ENABLED=0 GOOS=linux GOARCH="$goarch" \
+		go build -trimpath \
+		-ldflags "-s -w -X main.version=${EXPORTER_VERSION:-0.1.0}" \
+		-o "$here/out/junkmesh-exporter")
+	export JUNKMESH_EXPORTER_BIN="$here/out/junkmesh-exporter"
+	export JUNKMESH_EXPORTER_DIR="$here/../exporter"
+else
+	echo "== Skipping junkmesh-exporter (no exporter/ dir or no go toolchain)"
+fi
 
 echo "== Running mkimage ($ALPINE_TAG $ARCH)"
 sh aports/scripts/mkimage.sh \

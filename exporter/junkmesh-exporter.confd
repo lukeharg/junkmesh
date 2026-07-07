@@ -1,0 +1,5 @@
+# junkmesh-exporter environment (written at install; edit and restart)
+# JM_LISTEN="[::]:3904"
+# JM_GARAGE_ADMIN="http://[::1]:3903"
+# JM_GARAGE_TOKEN=""
+# JM_DATA_DIR="/var/lib/garage/data"

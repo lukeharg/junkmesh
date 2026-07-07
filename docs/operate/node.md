@@ -20,7 +20,11 @@ $ yggdrasilctl getPeers        # ≥1 peer, low latency to LAN peers
 $ garage status                # all members up, layout consistent
 $ garage stats                 # disk usage, resync queue (should trend to 0)
 $ df -h /var/lib/garage        # capacity headroom
+$ curl -s localhost:3904/api/v1/status   # all of the above, as JSON
 ```
+
+For continuous monitoring across the cluster, see
+[Metrics & monitoring](metrics.md).
 
 A healthy resync queue is near zero; a persistently large one means the
 cluster is rebalancing (fine) or a node has been down too long (investigate).

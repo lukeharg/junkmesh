@@ -8,6 +8,7 @@ RUN apk add --no-cache \
 	build-base \
 	dosfstools \
 	git \
+	go \
 	grub-bios \
 	grub-efi \
 	mtools \

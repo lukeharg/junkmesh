@@ -1,7 +1,8 @@
 # Architecture overview
 
-A Junkmesh node is a retired laptop running four small things on Alpine
-Linux. Everything else is emergent.
+A Junkmesh node is a retired laptop running a handful of small things on
+Alpine Linux — Yggdrasil, Garage, a firewall and a
+[metrics exporter](../operate/metrics.md). Everything else is emergent.
 
 ```
 ┌─────────────────────────────────────────────────────┐

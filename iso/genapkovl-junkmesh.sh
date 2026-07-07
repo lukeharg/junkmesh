@@ -106,6 +106,9 @@ table inet junkmesh {
     iifname "tun0" ip6 saddr 200::/7 tcp dport 3901 accept comment "garage rpc"
     iifname "tun0" ip6 saddr 200::/7 tcp dport 3900 accept comment "garage s3"
 
+    # Node metrics/status API — mesh only, for self-hosted monitoring
+    iifname "tun0" ip6 saddr 200::/7 tcp dport 3904 accept comment "junkmesh exporter"
+
     # SSH — LAN only by default. To allow your admin machine over the
     # mesh, add a rule scoped to its yggdrasil address, e.g.:
     #   iifname "tun0" ip6 saddr 200:xxxx:xxxx:xxxx::/64 tcp dport 22 accept
@@ -116,6 +119,17 @@ table inet junkmesh {
   }
 }
 EOF
+
+# Management-plane exporter, if the build produced one (see iso/build.sh).
+if [ -n "$JUNKMESH_EXPORTER_BIN" ] && [ -f "$JUNKMESH_EXPORTER_BIN" ]; then
+	mkdir -p "$tmp"/usr/local/bin "$tmp"/etc/init.d "$tmp"/etc/conf.d
+	cp "$JUNKMESH_EXPORTER_BIN" "$tmp"/usr/local/bin/junkmesh-exporter
+	chmod 755 "$tmp"/usr/local/bin/junkmesh-exporter
+	cp "$JUNKMESH_EXPORTER_DIR"/junkmesh-exporter.initd "$tmp"/etc/init.d/junkmesh-exporter
+	chmod 755 "$tmp"/etc/init.d/junkmesh-exporter
+	cp "$JUNKMESH_EXPORTER_DIR"/junkmesh-exporter.confd "$tmp"/etc/conf.d/junkmesh-exporter
+	chmod 644 "$tmp"/etc/conf.d/junkmesh-exporter
+fi
 
 # The node installer/configurator.
 mkdir -p "$tmp"/usr/local/sbin
@@ -194,6 +208,7 @@ fi
 
 # --- 7. garage config (storage layer) ---------------------------------------
 say "Writing /etc/garage.toml"
+admintoken="$(openssl rand -hex 32)"
 cat > /etc/garage.toml <<GARAGE
 metadata_dir = "/var/lib/garage/meta"
 data_dir     = "/var/lib/garage/data"
@@ -215,19 +230,34 @@ root_domain = ".web.junkmesh"
 
 [admin]
 api_bind_addr = "[::1]:3903"
+admin_token   = "$admintoken"
+metrics_token = "$admintoken"
 GARAGE
 chmod 640 /etc/garage.toml
 chown root:garage /etc/garage.toml 2>/dev/null || true
 mkdir -p /var/lib/garage/meta /var/lib/garage/data
 chown -R garage:garage /var/lib/garage 2>/dev/null || true
 
-# --- 8. services -----------------------------------------------------------
+# --- 8. metrics exporter (management plane) ----------------------------------
+if [ -x /usr/local/bin/junkmesh-exporter ]; then
+	say "Configuring junkmesh-exporter (metrics on port 3904, mesh-only)"
+	cat > /etc/conf.d/junkmesh-exporter <<EXPORTER
+JM_LISTEN="[::]:3904"
+JM_GARAGE_ADMIN="http://[::1]:3903"
+JM_GARAGE_TOKEN="$admintoken"
+JM_DATA_DIR="/var/lib/garage/data"
+EXPORTER
+	chmod 600 /etc/conf.d/junkmesh-exporter
+fi
+
+# --- 9. services -----------------------------------------------------------
 say "Enabling services"
-for svc in yggdrasil garage nftables chronyd sshd; do
+for svc in yggdrasil garage nftables chronyd sshd junkmesh-exporter; do
+	[ -e "/etc/init.d/$svc" ] || continue
 	rc-update add "$svc" default 2>/dev/null || true
 done
 
-# --- 9. install to disk -----------------------------------------------------
+# --- 10. install to disk ----------------------------------------------------
 say "Installing Alpine (sys mode) to $disk — this takes a few minutes"
 export ERASE_DISKS="$disk"
 setup-disk -m sys "$disk"

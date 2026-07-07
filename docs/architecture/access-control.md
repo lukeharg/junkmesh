@@ -45,6 +45,9 @@ table inet junkmesh {
     iifname "tun0" ip6 saddr 200::/7 tcp dport 3901 accept comment "garage rpc"
     iifname "tun0" ip6 saddr 200::/7 tcp dport 3900 accept comment "garage s3"
 
+    # Node metrics/status API — mesh only
+    iifname "tun0" ip6 saddr 200::/7 tcp dport 3904 accept comment "junkmesh exporter"
+
     # SSH — LAN only by default; broaden deliberately if you must
     iifname != "tun0" tcp dport 22 accept
   }

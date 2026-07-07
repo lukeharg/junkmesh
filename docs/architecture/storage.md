@@ -53,6 +53,8 @@ root_domain = ".web.junkmesh"
 
 [admin]
 api_bind_addr = "[::1]:3903"
+admin_token   = "<generated at install>"   # used by junkmesh-exporter
+metrics_token = "<generated at install>"
 ```
 
 Because every node reaches every other node directly over the mesh — no NAT,

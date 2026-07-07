@@ -21,6 +21,7 @@ replicas of everything, spread across households.
 |---|---|
 | `docs/` + `mkdocs.yml` | Documentation site (MkDocs Material) |
 | `iso/` | Alpine `mkimage` profile, config overlay and build driver for the installable ISO |
+| `exporter/` | `junkmesh-exporter` — Go metrics/status API baked into the ISO (port 3904) |
 | `.github/workflows/docs.yml` | Deploys the site to GitHub Pages on push to `main` |
 | `.github/workflows/iso.yml` | Builds the ISO and attaches it to a Release on tag push (`v*`) |
 

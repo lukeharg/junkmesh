@@ -39,6 +39,7 @@ junkmesh-x86_64.iso: OK
 | Garage | 2.3.x | [Storage layer](../architecture/storage.md) |
 | nftables | — | [Ring 1 access control](../architecture/access-control.md) |
 | `junkmesh-setup` | built from this repo | Interactive disk installer & node configurator |
+| `junkmesh-exporter` | built from this repo | [Metrics & status API](../operate/metrics.md) on port 3904 |
 
 ## Hardware requirements
 

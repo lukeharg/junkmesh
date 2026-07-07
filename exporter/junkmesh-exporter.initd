@@ -1,0 +1,21 @@
+#!/sbin/openrc-run
+
+name="junkmesh-exporter"
+description="Junkmesh node metrics and status API"
+
+command="/usr/local/bin/junkmesh-exporter"
+command_background="yes"
+pidfile="/run/${RC_SVCNAME}.pid"
+output_log="/var/log/${RC_SVCNAME}.log"
+error_log="/var/log/${RC_SVCNAME}.log"
+
+depend() {
+	need net
+	use yggdrasil garage
+	after firewall
+}
+
+start_pre() {
+	# conf.d variables must be exported to reach the daemon's environment
+	export JM_LISTEN JM_GARAGE_ADMIN JM_GARAGE_TOKEN JM_DATA_DIR
+}

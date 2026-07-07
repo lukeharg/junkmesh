@@ -17,8 +17,11 @@ we intend to answer them.
 - [ ] Scripted cluster bootstrap (`junkmesh-cluster init` / `join`)
 - [ ] Peer-exchange convention so Junkmesh nodes can find each other without
       relying on public Yggdrasil peers
-- [ ] Node health beacon (uptime, capacity, Garage status) published over the
-      mesh
+- [x] Per-node metrics/status API (`junkmesh-exporter`: Prometheus
+      `/metrics` + JSON `/api/v1/status` on port 3904 —
+      [docs](../operate/metrics.md))
+- [ ] Node health beacon / decentralised discovery over the mesh, so
+      monitoring targets don't need a hand-maintained list
 - [ ] ARM ISO (aarch64) for retired Chromebooks, Raspberry Pis and Mac minis
 
 ## Phase 2 — Admission without administrators

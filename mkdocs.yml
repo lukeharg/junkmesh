@@ -81,6 +81,7 @@ nav:
   - Operate:
       - Running a node: operate/node.md
       - Using the storage: operate/storage.md
+      - Metrics & monitoring: operate/metrics.md
 
 extra_css:
   - stylesheets/extra.css

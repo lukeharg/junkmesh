@@ -49,6 +49,10 @@ Generates the config tarball unpacked over `/` when the live system boots:
 - `/usr/local/sbin/junkmesh-setup` — the
   [installer](../install/first-boot.md) that generates the node identity,
   writes `garage.toml`, enables services and runs `setup-disk`
+- `/usr/local/bin/junkmesh-exporter` — the
+  [metrics/status API](../operate/metrics.md), cross-compiled from
+  [`exporter/`](https://github.com/lukeharg/junkmesh/tree/main/exporter)
+  during the build, plus its OpenRC service
 - MOTD, DHCP networking, and the usual OpenRC runlevels
 
 ### [`build.sh`](https://github.com/lukeharg/junkmesh/blob/main/iso/build.sh) — the driver
