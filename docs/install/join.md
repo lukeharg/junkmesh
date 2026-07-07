@@ -1,7 +1,7 @@
 # Join the mesh
 
 A freshly installed node is an island. Connecting it happens in two
-independent steps that mirror the [architecture](../architecture/overview.md):
+independent steps that mirror the [architecture](../architecture/index.md):
 **peer at the network layer**, then **join a cluster at the storage layer**.
 
 ## Step 1 — Peer with other nodes

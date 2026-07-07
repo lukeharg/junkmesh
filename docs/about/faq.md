@@ -52,6 +52,16 @@ with 2 GB of RAM. Anything from the last ~15 years that boots and has a
 working disk is a candidate. SSDs are nicer to Garage's metadata engine than
 spinning disks, but both work.
 
+## Why no containers?
+
+Because they'd be dead weight. A node runs exactly three programs —
+Yggdrasil, Garage and the metrics exporter, all small static Go binaries —
+as plain OpenRC services on Alpine. Docker or Kubernetes would add hundreds
+of megabytes, another daemon to babysit and another attack surface, in
+exchange for solving isolation and orchestration problems this appliance
+doesn't have. On a 2 GB laptop from 2012, that overhead is the difference
+between a useful node and a wheezing one.
+
 ## Why Alpine Linux?
 
 Small (the ISO is ~200 MB), boots fast on old hardware, ships both

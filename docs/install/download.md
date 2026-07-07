@@ -53,7 +53,7 @@ No ISO for ARM yet — see the [roadmap](../about/roadmap.md).
 ## Prefer to build it yourself?
 
 Good instinct for an unsigned experimental image:
-[Build the ISO yourself](../build/iso.md) — one script, reproducible in
+[Build the ISO yourself](build.md) — one script, reproducible in
 Docker or on any Alpine box.
 
 Next: [Write it to USB →](usb.md)

@@ -6,13 +6,14 @@
 
 <p class="jm-tagline">No masters. No lighthouses. Just mesh.</p>
 
-<p class="jm-sub">Old laptops don't die — they become nodes in a
+<p class="jm-sub">Boot one ISO on any x86 machine and it becomes a node in a
 community-owned, S3-compatible storage cloud with <strong>no central
 infrastructure at all</strong>. An encrypted Yggdrasil mesh for the network,
-Garage for replicated storage, one bootable ISO to set it all up.</p>
+Garage for replicated storage, metrics built in — three lightweight Alpine
+services, no containers, no one in charge.</p>
 
 [Get the ISO](install/download.md){ .md-button .md-button--primary }
-[How it works](architecture/overview.md){ .md-button }
+[How it works](architecture/index.md){ .md-button }
 
 </div>
 
@@ -82,7 +83,17 @@ registered or blessed by anyone.
 - :material-usb-flash-drive: **[The installer ISO](install/download.md)**
 
     Alpine Linux, ~390 MB, boots BIOS or UEFI. One command turns a retired
-    laptop into a node. [Build it yourself](build/iso.md) if you prefer.
+    laptop into a node. [Build it yourself](install/build.md) if you prefer.
+
+- :material-chart-line: **[Observability built in](operate/metrics.md)**
+
+    Every node serves Prometheus metrics and a JSON status API. Watch your
+    mesh from Grafana, New Relic or anything OTLP — self-hosted, of course.
+
+- :material-feather: **[Lightweight by design](about/faq.md#why-no-containers)**
+
+    Three static Go binaries as plain OpenRC services. No Docker, no
+    Kubernetes — a 2 GB laptop from 2012 is a first-class citizen.
 
 </div>
 

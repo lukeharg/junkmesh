@@ -111,6 +111,68 @@ only when the cluster does. Point Grafana at Prometheus and alert on the
 obvious: `junkmesh_garage_healthy == 0`, `junkmesh_mesh_peers < 1`,
 `junkmesh_storage_free_bytes` trending toward zero.
 
+## Collecting with OpenTelemetry (New Relic, or anything OTLP)
+
+If your observability lives in New Relic or any backend that speaks OTLP,
+run an [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/)
+on your management machine. Its Prometheus receiver scrapes the nodes over
+the mesh; its OTLP exporter ships the result wherever you like — the nodes
+themselves need nothing extra installed.
+
+```yaml
+# otel-collector.yaml
+receivers:
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: junkmesh-nodes
+          scrape_interval: 30s
+          static_configs:
+            - targets:
+                - "[200:6fc8:9be3:aaaa::1]:3904"
+                - "[200:71ab:44c0:bbbb::1]:3904"
+        - job_name: junkmesh-garage
+          metrics_path: /metrics/garage
+          scrape_interval: 60s
+          static_configs:
+            - targets:
+                - "[200:6fc8:9be3:aaaa::1]:3904"
+
+processors:
+  batch: {}
+  resource:
+    attributes:
+      - key: service.name
+        value: junkmesh-node
+        action: upsert
+
+exporters:
+  otlphttp:
+    endpoint: https://otlp.nr-data.net        # New Relic's OTLP endpoint
+    headers:
+      api-key: ${NEW_RELIC_LICENSE_KEY}
+  # or any other OTLP backend:
+  # otlp:
+  #   endpoint: my-otel-backend.internal:4317
+
+service:
+  pipelines:
+    metrics:
+      receivers: [prometheus]
+      processors: [resource, batch]
+      exporters: [otlphttp]
+```
+
+All `junkmesh_*` gauges arrive as OTel metrics with the node's scrape
+target as an attribute, so a New Relic dashboard or NRQL alert
+(`SELECT latest(junkmesh_garage_healthy) FROM Metric FACET instance`)
+works out of the box. The same collector pattern feeds Datadog, Grafana
+Cloud, Honeycomb or a custom OTLP service — the nodes don't know or care
+who is watching.
+
+A custom management UI that prefers plain JSON can skip metrics pipelines
+entirely and poll `GET /api/v1/status` on each node.
+
 ## Discovery
 
 Finding nodes to monitor is the classic decentralised-system problem. In
@@ -160,4 +222,4 @@ library. It reads `/proc` for system stats, shells out to `yggdrasilctl
 -json` for mesh state, and queries the Garage admin API on localhost. Both
 Yggdrasil and Garage are Go projects, so the whole node stack is three
 static binaries that cross-compile trivially — the ISO build compiles the
-exporter automatically ([build docs](../build/iso.md)).
+exporter automatically ([build docs](../install/build.md)).

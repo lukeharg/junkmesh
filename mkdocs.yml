@@ -33,9 +33,12 @@ theme:
         name: Switch to light mode
   features:
     - navigation.tabs
-    - navigation.sections
+    - navigation.indexes
     - navigation.top
     - navigation.footer
+    - navigation.instant
+    - navigation.tracking
+    - toc.follow
     - search.suggest
     - search.highlight
     - content.code.copy
@@ -62,23 +65,25 @@ markdown_extensions:
 nav:
   - Home: index.md
   - About:
+      - about/index.md
       - Why Junkmesh: about/why.md
       - Junkmesh vs Junk Net: about/junknet.md
       - FAQ: about/faq.md
       - Roadmap: about/roadmap.md
   - Architecture:
-      - Overview: architecture/overview.md
+      - architecture/index.md
       - Network layer — Yggdrasil: architecture/network.md
       - Storage layer — Garage: architecture/storage.md
       - Access control: architecture/access-control.md
   - Install:
-      - Download the ISO: install/download.md
-      - Write it to USB: install/usb.md
-      - First boot & install: install/first-boot.md
-      - Join the mesh: install/join.md
-  - Build:
-      - Build the ISO yourself: build/iso.md
+      - install/index.md
+      - 1 · Download the ISO: install/download.md
+      - 2 · Write it to USB: install/usb.md
+      - 3 · First boot & install: install/first-boot.md
+      - 4 · Join the mesh: install/join.md
+      - Build the ISO yourself: install/build.md
   - Operate:
+      - operate/index.md
       - Running a node: operate/node.md
       - Using the storage: operate/storage.md
       - Metrics & monitoring: operate/metrics.md
