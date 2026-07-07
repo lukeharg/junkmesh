@@ -1,5 +1,7 @@
 /* ── Junkmesh brand ──────────────────────────────────────────────────── */
 
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap');
+
 :root {
   --jm-ink:    #171a21;   /* charcoal — headers, hero */
   --jm-amber:  #ff6a3c;   /* rust/amber — the accent */
@@ -29,8 +31,10 @@
 /* ── typography ──────────────────────────────────────────────────────── */
 
 .md-typeset h1,
-.md-typeset h2 {
-  font-weight: 800;
+.md-typeset h2,
+.md-typeset h3 {
+  font-family: "Space Grotesk", Inter, sans-serif;
+  font-weight: 700;
   letter-spacing: -0.02em;
 }
 
@@ -41,39 +45,75 @@
 /* ── hero (home page) ────────────────────────────────────────────────── */
 
 .jm-hero {
-  margin: 0.2rem 0 1.6rem;
-  padding: 2.6rem 1.6rem 2.4rem;
-  border-radius: 0.8rem;
+  position: relative;
+  overflow: hidden;
+  margin: 0.4rem 0 1.8rem;
+  padding: 3.4rem 1.6rem 3rem;
+  border-radius: 1rem;
   text-align: center;
   color: #e8eaf0;
   background:
-    radial-gradient(circle at 12% 18%, rgba(255, 106, 60, 0.22), transparent 34%),
-    radial-gradient(circle at 88% 78%, rgba(255, 106, 60, 0.16), transparent 30%),
-    radial-gradient(circle at 78% 12%, rgba(120, 140, 200, 0.18), transparent 32%),
-    linear-gradient(160deg, #171a21 0%, #23262f 100%);
+    radial-gradient(circle at 12% 18%, rgba(255, 106, 60, 0.20), transparent 34%),
+    radial-gradient(circle at 88% 78%, rgba(255, 106, 60, 0.14), transparent 30%),
+    radial-gradient(circle at 78% 12%, rgba(120, 140, 200, 0.16), transparent 32%),
+    linear-gradient(160deg, #14161c 0%, #23262f 100%);
+}
+
+/* faint mesh constellation behind the hero */
+.jm-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image:
+    radial-gradient(rgba(255, 255, 255, 0.16) 1.5px, transparent 1.5px),
+    radial-gradient(rgba(255, 106, 60, 0.18) 1.5px, transparent 1.5px);
+  background-size: 84px 84px, 132px 132px;
+  background-position: 12px 18px, 48px 60px;
+  -webkit-mask-image: radial-gradient(ellipse at center, transparent 28%, black 100%);
+  mask-image: radial-gradient(ellipse at center, transparent 28%, black 100%);
+}
+
+.jm-hero > * {
+  position: relative;
+}
+
+.jm-hero .jm-mark {
+  width: 4.2rem;
+  height: 4.2rem;
+  margin-bottom: 0.6rem;
 }
 
 .jm-hero h1 {
-  margin: 0 0 0.3rem;
-  font-size: 2.6rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
+  margin: 0 0 0.4rem;
+  font-family: "Space Grotesk", Inter, sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: -0.035em;
   color: #ffffff;
 }
 
 .jm-hero .jm-tagline {
-  margin: 0 auto 0.7rem;
-  font-size: 1.05rem;
+  margin: 0 auto 0.8rem;
+  font-family: "Space Grotesk", Inter, sans-serif;
+  font-size: 1.1rem;
   font-weight: 600;
+  letter-spacing: 0.01em;
   color: var(--jm-amber);
 }
 
 .jm-hero .jm-sub {
   max-width: 34rem;
-  margin: 0 auto 1.3rem;
+  margin: 0 auto 1.5rem;
   font-size: 0.78rem;
-  line-height: 1.65;
+  line-height: 1.7;
   color: #b9bec9;
+}
+
+/* hide the "edit this page" pencil on the landing page */
+.md-content:has(.jm-hero) .md-content__button {
+  display: none;
 }
 
 .jm-hero .md-button {
@@ -118,38 +158,61 @@
 
 .jm-steps {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  grid-template-columns: 1fr;
   gap: 0.8rem;
   margin: 1.2rem 0;
 }
 
+@media screen and (min-width: 45em) {
+  .jm-steps {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 .jm-step {
-  padding: 1rem 1.1rem;
+  padding: 1.1rem 1.2rem;
   border: 1px solid var(--md-default-fg-color--lightest);
+  border-top: 3px solid var(--jm-amber);
   border-radius: 0.6rem;
+  transition: border-color 125ms, transform 125ms, box-shadow 125ms;
+}
+
+.jm-step:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.10);
+}
+
+.jm-step .jm-step-head {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.55rem;
 }
 
 .jm-step .jm-step-n {
+  flex: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 1.7rem;
   height: 1.7rem;
-  margin-bottom: 0.5rem;
   border-radius: 50%;
   background: var(--jm-amber);
   color: #171a21;
-  font-weight: 800;
+  font-family: "Space Grotesk", Inter, sans-serif;
+  font-weight: 700;
   font-size: 0.85rem;
 }
 
-.jm-step p {
-  margin: 0.2rem 0 0;
-  font-size: 0.72rem;
+.jm-step .jm-step-head strong {
+  font-family: "Space Grotesk", Inter, sans-serif;
+  font-size: 0.8rem;
+  line-height: 1.25;
 }
 
-.jm-step strong {
-  font-size: 0.8rem;
+.jm-step p {
+  margin: 0;
+  font-size: 0.72rem;
 }
 
 /* ── cards polish ────────────────────────────────────────────────────── */

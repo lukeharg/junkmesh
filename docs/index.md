@@ -1,6 +1,14 @@
+---
+hide:
+  - navigation
+  - toc
+---
+
 # Junkmesh { .jm-visually-hidden style="display:none" }
 
 <div class="jm-hero" markdown>
+
+<img class="jm-mark" src="assets/mark-hero.svg" alt="" aria-hidden="true">
 
 <h1>Junkmesh</h1>
 
@@ -31,22 +39,22 @@ the thing works.
 
 <div class="jm-steps" markdown>
 <div class="jm-step" markdown>
-<span class="jm-step-n">1</span>
-**Boot the ISO on your own machine**
+<div class="jm-step-head" markdown><span class="jm-step-n">1</span>
+<strong>Boot the ISO on your machine</strong></div>
 <p>Any x86 laptop from the last ~15 years. Write the image to USB, boot,
 run <code>junkmesh-setup</code>. The disk is wiped and the machine becomes
 your node.</p>
 </div>
 <div class="jm-step" markdown>
-<span class="jm-step-n">2</span>
-**Cluster with people you trust**
+<div class="jm-step-head" markdown><span class="jm-step-n">2</span>
+<strong>Cluster with people you trust</strong></div>
 <p>Peer over the mesh, share a cluster secret out-of-band, and existing
 members admit your node explicitly. Three households make a resilient
 cluster.</p>
 </div>
 <div class="jm-step" markdown>
-<span class="jm-step-n">3</span>
-**Get storage that outlives your hardware**
+<div class="jm-step-head" markdown><span class="jm-step-n">3</span>
+<strong>Storage that outlives hardware</strong></div>
 <p>Every object is replicated to three nodes in different homes. Your disk
 dies, your house floods — your data doesn't care. S3-compatible, works with
 rclone, restic, anything.</p>
